@@ -14,7 +14,7 @@ export interface PaginationState {
 
 export interface SearchState {
   query: string;
-  filteredData: (AccountData & { viewBalance: boolean })[];
+  filteredData: (AccountData & { isBalanceViewed: boolean })[];
 }
 
 export interface LoadingState {
