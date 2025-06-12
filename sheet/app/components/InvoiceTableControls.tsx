@@ -8,6 +8,7 @@ interface InvoiceTableControlsProps {
   onRefresh: () => void;
   isLoading: boolean;
   hasData: boolean;
+  searching: boolean;
 }
 
 export default function InvoiceTableControls({
@@ -18,19 +19,22 @@ export default function InvoiceTableControls({
   onRefresh,
   isLoading,
   hasData,
+  searching,
 }: InvoiceTableControlsProps) {
   return (
     <div className="p-6">
       <div className="flex items-center justify-end gap-4">
-        <div className=" max-w-md">
+        <div className="relative max-w-md">
           <input
             type="text"
             placeholder="Search Invoice"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="w-[150px] px-4 py-2 border border-gray-300 rounded-[6px]  focus:border-gray-600  text-[rgb(58,63,25)] text-opacity-75"
-            disabled={!hasData}
           />
+          {searching && (
+            <div className="inline-block animate-spin border-t-transparent rounded-full h-3 w-3 border-2 border-purple-500 -ml-6 absolute top-1/2 -translate-y-1/2"></div>
+          )}
         </div>
         <div className="flex gap-3">
           <button

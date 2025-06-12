@@ -85,7 +85,7 @@ export default function InvoiceRow({
       <td className="px-6 py-2 whitespace-nowrap text-center">
         {!item.isBalanceViewed ? (
           <div
-            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full  transition-colors ${
+            className={`inline-flex px-2 py-1 text-xs font-light rounded-full  transition-colors ${
               item.hasPaid
                 ? 'text-[rgba(86,202,0,1)] bg-[rgb(234,245,234)] '
                 : 'bg-[rgba(254,114,114,1)] text-white '

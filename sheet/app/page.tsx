@@ -29,34 +29,34 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="text-sm text-gray-600">
+          <div className="text-base text-[rgba(58,53,65,0.68)]">
             © 2022, Made by{' '}
             <a href="#" className="text-[rgba(145,85,253,1)] font-medium">
               ABC
             </a>
           </div>
-          <div className="flex items-center space-x-6 text-sm">
+          <div className="flex items-center space-x-6 text-base">
             <a
               href="#"
-              className="text-purple-600 hover:text-purple-700 transition-colors"
+              className="text-[rgba(145,85,253,1)] hover:text-purple-700 transition-colors"
             >
               License
             </a>
             <a
               href="#"
-              className="text-purple-600 hover:text-purple-700 transition-colors"
+              className="text-[rgba(145,85,253,1)] hover:text-purple-700 transition-colors"
             >
               More Themes
             </a>
             <a
               href="#"
-              className="text-purple-600 hover:text-purple-700 transition-colors"
+              className="text-[rgba(145,85,253,1)] hover:text-purple-700 transition-colors"
             >
               Documentation
             </a>
             <a
               href="#"
-              className="text-purple-600 hover:text-purple-700 transition-colors"
+              className="text-[rgba(145,85,253,1)] hover:text-purple-700 transition-colors"
             >
               Support
             </a>

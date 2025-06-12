@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { mockFetch, type AccountData } from '../api/mock';
 import type {
   SelectionState,
@@ -57,6 +57,18 @@ export default function InvoiceTable() {
     onConfirm: () => {},
   });
 
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  // 搜尋 input loading 狀態
+  const [searching, setSearching] = useState(false);
+
+  // 新增 searchInput 狀態
+  const [searchInput, setSearchInput] = useState('');
+  // 搜尋結果狀態
+  const [filteredData, setFilteredData] = useState<
+    (AccountData & { isBalanceViewed: boolean })[]
+  >([]);
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
   // 獲取發票資料
   const fetchInvoiceData = useCallback(async () => {
     setLoading({ isLoading: true, error: null });
@@ -89,7 +101,13 @@ export default function InvoiceTable() {
   // 初始載入資料
   useEffect(() => {
     fetchInvoiceData();
+    setIsFirstLoad(false);
   }, [fetchInvoiceData]);
+
+  // 當 invoiceData 變動時，預設顯示全部
+  useEffect(() => {
+    setFilteredData(invoiceData);
+  }, [invoiceData]);
 
   // 處理個別項目選取
   const handleItemSelect = (id: number) => {
@@ -189,26 +207,37 @@ export default function InvoiceTable() {
     setSearch((prev) => ({ ...prev, filteredData: newData }));
   };
 
+  // debounce 搜尋
+  useEffect(() => {
+    if (isFirstLoad) return;
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    setSearching(true);
+
+    debounceTimer.current = setTimeout(() => {
+      handleSearch(searchInput);
+      setSearching(false);
+    }, 2000);
+    return () => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    };
+  }, [searchInput]);
+
   // 處理搜尋
+  // 搜尋條件：id、name、mail、hasPaid
   const handleSearch = (query: string) => {
-    setSearch((prev) => {
-      const filteredData =
-        query.trim() === ''
-          ? invoiceData
-          : invoiceData.filter(
-              (item) =>
-                item.id.toString().includes(query) ||
-                item.name.toLowerCase().includes(query.toLowerCase()) ||
-                item.mail.toLowerCase().includes(query.toLowerCase())
-            );
+    const searchQuery = query.trim();
+    const filteredData =
+      searchQuery === ''
+        ? invoiceData
+        : invoiceData.filter(
+            (item) =>
+              item.id.toString().includes(searchQuery.toLowerCase()) ||
+              item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              item.mail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              (item.hasPaid ? 'Paid' : 'Unpaid').includes(searchQuery)
+          );
 
-      return {
-        query,
-        filteredData,
-      };
-    });
-
-    // 重置選取狀態
+    setFilteredData(filteredData);
     setSelection({ selectedIds: new Set(), isAllSelected: false });
   };
 
@@ -227,7 +256,7 @@ export default function InvoiceTable() {
   };
 
   // 計算分頁相關數據
-  const currentPageData = search.filteredData; // 服務端已經分頁，直接使用
+  const currentPageData = filteredData;
 
   const totalPages = Math.ceil(pagination.totalItems / pagination.pageSize);
   const hasNextPage = pagination.currentPage < totalPages;
@@ -237,13 +266,14 @@ export default function InvoiceTable() {
     <div className="bg-white rounded-[6px] shadow-sm ">
       {/* 頂部控制列 */}
       <InvoiceTableControls
-        searchQuery={search.query}
-        onSearchChange={handleSearch}
+        searchQuery={searchInput}
+        onSearchChange={setSearchInput}
         selectedCount={selection.selectedIds.size}
         onDeleteSelected={handleDeleteSelected}
         onRefresh={handleRefresh}
         isLoading={loading.isLoading}
-        hasData={currentPageData.length > 0}
+        hasData={filteredData.length > 0}
+        searching={searching}
       />
 
       {/* 錯誤狀態 */}
@@ -256,7 +286,7 @@ export default function InvoiceTable() {
       {/* 載入狀態 */}
       {loading.isLoading && (
         <div className="p-8 text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+          <div className="inline-block animate-spin border-t-transparent rounded-full h-8 w-8 border-4 border-purple-500"></div>
           <p className="mt-2 text-gray-600">Loading invoices...</p>
         </div>
       )}

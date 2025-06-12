@@ -24,11 +24,11 @@ export function mockFetch({
   pageSize: number;
 }): Promise<PaginatedResponse> {
   const random = Math.random();
-  if (random >= 0.3) {
-    return onSuccess({ page, pageSize });
-  } else {
-    return onError();
-  }
+  // if (random >= 0.3) {
+  return onSuccess({ page, pageSize });
+  // } else {
+  //   return onError();
+  // }
 }
 
 function onSuccess({
