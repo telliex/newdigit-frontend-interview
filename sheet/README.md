@@ -9,7 +9,7 @@
 
 ##### 設計稿
 
-https://www.figma.com/design/3RzJHJpz4Bo4JfTQvVZu15/Frontend-Interview?node-id=0-1&m=dev&t=VtVfzRuBm4L0hXG0-1
+<https://www.figma.com/design/3RzJHJpz4Bo4JfTQvVZu15/Frontend-Interview?node-id=0-1&m=dev&t=VtVfzRuBm4L0hXG0-1>
 
 ---
 
@@ -42,20 +42,24 @@ https://www.figma.com/design/3RzJHJpz4Bo4JfTQvVZu15/Frontend-Interview?node-id=0
 
 ---
 
+##### 備註
+
+- 刪除不需要發送請求，只要改變UI即可
+- 型別不能使用any
+- 使用專案內的 mockFetch 完成功能
+
+![mock-fetch](https://github.com/new-digit/frontend-interview/blob/main/sheet/public/mock-fetch.png)
+
 ### 功能檢查清單
 
 - ☑️ 點選黃框處可以選擇特定交易，並可以點擊按鈕刪除
 - ☑️ 點選紅框可以全選該頁所有交易，並可以點擊按鈕刪除
-- ☑️ 可以在搜尋欄搜尋特定交易(至少支持單一欄位搜尋，例如 ID 搜尋) ID 不需輸入0 前綴
+- ☑️ 可以在搜尋欄搜尋特定交易(至少支持單一欄位搜尋，例如 ID 搜尋) ID 不需輸入 0 前綴
 - ☑️ 點擊 REFRESH 重新抓取清單，抓取時需要有 loading 狀態的 UI 呈現
 - ☑️ 點選黃框處可以刪除單筆資料
 - ☑️ 點選紅框處將 Balance 欄位的狀態互相切換
 - ☑️ 點擊箭頭可以切換分頁，並呈現該頁相對應的資料數量
 
----
+### 可進一步優化的部分
 
-- 刪除不需要發送請求，只要改變 UI 即可
-- 型別不能使用 any
-- 使用專案內的 mockFetch 完成功能
-
-![mock-fetch](https://github.com/new-digit/frontend-interview/blob/main/sheet/public/mock-fetch.png)
+- 目前的 postcss.config 無法處理 Tailwind 自定義顏色. 可進一步使用 tailwind.config.js ，設定自訂顏色，且需安裝官方 tailwindcss 套件，確保自訂色彩可以生效。
