@@ -49,11 +49,14 @@ export default function InvoiceTable() {
     message: '',
     onConfirm: () => {},
   });
-
+  // 是否為第一次載入
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   // 搜尋 input loading 狀態
   const [searching, setSearching] = useState(false);
 
+  const [oriData, setOriData] = useState<
+    (AccountData & { isBalanceViewed: boolean })[]
+  >([]);
   // 新增 searchInput 狀態
   const [searchInput, setSearchInput] = useState('');
   // 搜尋結果狀態
@@ -78,7 +81,7 @@ export default function InvoiceTable() {
         };
       });
       setInvoiceData(newData);
-
+      setOriData(newData);
       // 從 API 回傳的資料中獲取總筆數
       setPagination((prev) => ({ ...prev, totalItems: response.totalItems }));
     } catch (error) {
@@ -154,10 +157,15 @@ export default function InvoiceTable() {
       title: 'Confirm Delete',
       message: `Are you sure you want to delete ${selectedCount} selected invoices? This action cannot be undone.`,
       onConfirm: () => {
-        const newData = invoiceData.filter(
+        const newData = filteredData.filter(
           (item) => !selection.selectedIds.has(item.id)
         );
         setInvoiceData(newData);
+
+        const newOriData = oriData.filter(
+          (item) => !selection.selectedIds.has(item.id)
+        );
+        setOriData(newOriData);
 
         setSelection({ selectedIds: new Set(), isAllSelected: false });
         setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
@@ -175,8 +183,10 @@ export default function InvoiceTable() {
       title: 'Confirm Delete',
       message: `Are you sure you want to delete invoice ${invoiceId}? This action cannot be undone.`,
       onConfirm: () => {
-        const newData = invoiceData.filter((item) => item.id !== id);
+        const newData = filteredData.filter((item) => item.id !== id);
         setInvoiceData(newData);
+        const newOriData = oriData.filter((item) => item.id !== id);
+        setOriData(newOriData);
 
         setSelection((prev) => ({
           selectedIds: new Set(
@@ -191,7 +201,7 @@ export default function InvoiceTable() {
 
   // 處理Balance狀態切換
   const handleToggleBalance = (id: number) => {
-    const newData = invoiceData.map((item) =>
+    const newData = filteredData.map((item) =>
       item.id === id
         ? { ...item, isBalanceViewed: !item.isBalanceViewed }
         : item
@@ -220,7 +230,7 @@ export default function InvoiceTable() {
     const searchQuery = query.trim();
     const filteredData =
       searchQuery === ''
-        ? invoiceData
+        ? oriData
         : invoiceData.filter(
             (item) =>
               item.id.toString().includes(searchQuery.toLowerCase()) ||
