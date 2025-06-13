@@ -5,7 +5,6 @@ import { mockFetch, type AccountData } from '../api/mock';
 import type {
   SelectionState,
   PaginationState,
-  SearchState,
   LoadingState,
 } from '../types/invoice';
 import InvoiceRow from './InvoiceRow';
@@ -30,12 +29,6 @@ export default function InvoiceTable() {
     currentPage: 1,
     pageSize: 10,
     totalItems: 0,
-  });
-
-  // 搜尋狀態管理
-  const [search, setSearch] = useState<SearchState>({
-    query: '',
-    filteredData: [],
   });
 
   // 載入狀態管理
@@ -78,14 +71,14 @@ export default function InvoiceTable() {
         page: pagination.currentPage,
         pageSize: pagination.pageSize,
       });
-      let newData = response.data.map((item) => {
+      const newData = response.data.map((item) => {
         return {
           ...item,
           isBalanceViewed: false,
         };
       });
       setInvoiceData(newData);
-      setSearch((prev) => ({ ...prev, filteredData: newData }));
+
       // 從 API 回傳的資料中獲取總筆數
       setPagination((prev) => ({ ...prev, totalItems: response.totalItems }));
     } catch (error) {
@@ -165,7 +158,7 @@ export default function InvoiceTable() {
           (item) => !selection.selectedIds.has(item.id)
         );
         setInvoiceData(newData);
-        setSearch((prev) => ({ ...prev, filteredData: newData }));
+
         setSelection({ selectedIds: new Set(), isAllSelected: false });
         setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
       },
@@ -184,7 +177,7 @@ export default function InvoiceTable() {
       onConfirm: () => {
         const newData = invoiceData.filter((item) => item.id !== id);
         setInvoiceData(newData);
-        setSearch((prev) => ({ ...prev, filteredData: newData }));
+
         setSelection((prev) => ({
           selectedIds: new Set(
             [...prev.selectedIds].filter((selectedId) => selectedId !== id)
@@ -204,7 +197,6 @@ export default function InvoiceTable() {
         : item
     );
     setInvoiceData(newData);
-    setSearch((prev) => ({ ...prev, filteredData: newData }));
   };
 
   // debounce 搜尋
@@ -216,7 +208,7 @@ export default function InvoiceTable() {
     debounceTimer.current = setTimeout(() => {
       handleSearch(searchInput);
       setSearching(false);
-    }, 2000);
+    }, 1000);
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
@@ -245,7 +237,6 @@ export default function InvoiceTable() {
   const handleRefresh = () => {
     fetchInvoiceData();
     setSelection({ selectedIds: new Set(), isAllSelected: false });
-    setSearch((prev) => ({ ...prev, query: '' }));
   };
 
   // 處理分頁變更
@@ -272,7 +263,6 @@ export default function InvoiceTable() {
         onDeleteSelected={handleDeleteSelected}
         onRefresh={handleRefresh}
         isLoading={loading.isLoading}
-        hasData={filteredData.length > 0}
         searching={searching}
       />
 
@@ -371,7 +361,6 @@ export default function InvoiceTable() {
           {/* 分頁控制器 */}
           <PaginationControls
             currentPage={pagination.currentPage}
-            totalPages={totalPages}
             hasPrevPage={hasPrevPage}
             hasNextPage={hasNextPage}
             onPageChange={handlePageChange}

@@ -7,7 +7,6 @@ interface InvoiceTableControlsProps {
   onDeleteSelected: () => void;
   onRefresh: () => void;
   isLoading: boolean;
-  hasData: boolean;
   searching: boolean;
 }
 
@@ -18,7 +17,6 @@ export default function InvoiceTableControls({
   onDeleteSelected,
   onRefresh,
   isLoading,
-  hasData,
   searching,
 }: InvoiceTableControlsProps) {
   return (

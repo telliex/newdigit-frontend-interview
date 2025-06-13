@@ -2,7 +2,6 @@
 
 interface PaginationControlsProps {
   currentPage: number;
-  totalPages: number;
   hasPrevPage: boolean;
   hasNextPage: boolean;
   onPageChange: (newPage: number) => void;
@@ -10,7 +9,6 @@ interface PaginationControlsProps {
 
 export default function PaginationControls({
   currentPage,
-  totalPages,
   hasPrevPage,
   hasNextPage,
   onPageChange,
@@ -18,15 +16,7 @@ export default function PaginationControls({
   return (
     <div className="px-6 py-4 border-t border-gray-200">
       <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-700">
-          {/* Showing {currentPageData.length} of {pagination.totalItems}{' '}
-          results
-          {totalPages > 1 && (
-            <span className="ml-2">
-              (Page {pagination.currentPage} of {totalPages})
-            </span>
-          )} */}
-        </div>
+        <div className="text-sm text-gray-700"></div>
         <div className="flex items-center space-x-2">
           <button
             onClick={() => onPageChange(currentPage - 1)}

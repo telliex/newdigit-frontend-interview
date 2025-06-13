@@ -1,4 +1,5 @@
 import InvoiceTable from './components/InvoiceTable';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -8,10 +9,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex justify-end">
           <div className="relative">
             <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 ">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                 alt="User Avatar"
                 className="w-full h-full object-cover"
+                width={256}
+                height={256}
               />
             </div>
             <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
