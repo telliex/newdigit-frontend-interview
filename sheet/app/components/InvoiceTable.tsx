@@ -1,5 +1,8 @@
 'use client';
 
+// InvoiceTable 元件：發票管理主表格，整合發票資料的顯示、搜尋、分頁、刪除、狀態切換等功能。
+// 此元件負責所有發票相關的狀態管理、資料流與 UI 組合。
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { mockFetch, type AccountData } from '../api/mock';
 import type {
@@ -53,7 +56,7 @@ export default function InvoiceTable() {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   // 搜尋 input loading 狀態
   const [searching, setSearching] = useState(false);
-
+  // 原始資料狀態
   const [oriData, setOriData] = useState<
     (AccountData & { isBalanceViewed: boolean })[]
   >([]);
@@ -63,7 +66,14 @@ export default function InvoiceTable() {
   const [filteredData, setFilteredData] = useState<
     (AccountData & { isBalanceViewed: boolean })[]
   >([]);
+  // debounce 搜尋 timer
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
+  // 計算分頁相關數據
+  const currentPageData = filteredData;
+  const totalPages = Math.ceil(pagination.totalItems / pagination.pageSize);
+  const hasNextPage = pagination.currentPage < totalPages;
+  const hasPrevPage = pagination.currentPage > 1;
 
   // 獲取發票資料
   const fetchInvoiceData = useCallback(async () => {
@@ -199,7 +209,7 @@ export default function InvoiceTable() {
     });
   };
 
-  // 處理Balance狀態切換
+  // 處理 Balance 狀態切換
   const handleToggleBalance = (id: number) => {
     const newData = filteredData.map((item) =>
       item.id === id
@@ -255,13 +265,6 @@ export default function InvoiceTable() {
     setPagination((prev) => ({ ...prev, currentPage: newPage }));
     setSelection({ selectedIds: new Set(), isAllSelected: false });
   };
-
-  // 計算分頁相關數據
-  const currentPageData = filteredData;
-
-  const totalPages = Math.ceil(pagination.totalItems / pagination.pageSize);
-  const hasNextPage = pagination.currentPage < totalPages;
-  const hasPrevPage = pagination.currentPage > 1;
 
   return (
     <div className="bg-white rounded-[6px] shadow-sm ">

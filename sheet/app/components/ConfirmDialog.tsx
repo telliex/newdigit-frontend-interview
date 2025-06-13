@@ -1,5 +1,8 @@
 'use client';
 
+// ConfirmDialog 元件：通用確認刪除對話框，顯示確認訊息與操作按鈕。
+// 用於所有需要二次確認的操作（如刪除）。
+
 interface ConfirmDialogProps {
   isOpen: boolean;
   title: string;

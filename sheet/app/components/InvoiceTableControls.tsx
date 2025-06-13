@@ -1,5 +1,8 @@
 'use client';
 
+// InvoiceTableControls 元件：發票表格的頂部控制列，包含搜尋欄、刪除與刷新按鈕等操作。
+// 用於控制發票列表的篩選與批次操作。
+
 interface InvoiceTableControlsProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;

@@ -1,5 +1,7 @@
 'use client';
 
+// PaginationControls 元件：發票表格的分頁控制元件，負責分頁切換與頁碼顯示。
+
 interface PaginationControlsProps {
   currentPage: number;
   hasPrevPage: boolean;

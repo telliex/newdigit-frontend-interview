@@ -1,5 +1,7 @@
 'use client';
 
+// InvoiceRow 元件：單一發票資料列，負責顯示發票的詳細資訊（如客戶、金額、狀態）與操作按鈕（刪除、檢視）。
+
 import type { AccountData } from '../api/mock';
 import {
   formatInvoiceId,
